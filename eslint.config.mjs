@@ -7,8 +7,18 @@ const __dirname = dirname(__filename);
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
+  recommendedConfig: { plugins: [] },
 });
 
-const eslintConfig = [...compat.extends("next/core-web-vitals")];
+// Get the Next.js config but explicitly disable any problematic parsers
+const eslintConfig = [
+  ...compat.extends("next/core-web-vitals"),
+  {
+    // Avoid function serialization issues
+    languageOptions: {
+      parser: null, // This ensures we don't have parser serialization issues
+    },
+  },
+];
 
 export default eslintConfig;
